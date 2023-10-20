@@ -1,0 +1,16 @@
+destination: "../../websites/R/pprules/"
+url: "https://trevorldavis.com/R/pprules"
+development:
+    mode: auto
+reference:
+    - title: "Ruleset generators"
+      desc: "Functions to generate rulesets and rulebooks"
+      contents:
+        - save_ruleset
+        - save_rulebook
+        - names_rulesets
+    - title: "Developer utilities"
+      desc: "Functions to help developers"
+      contents:
+        - save_promo_image
+        - game_kit

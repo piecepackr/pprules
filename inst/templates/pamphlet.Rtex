@@ -1,0 +1,72 @@
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+tumble <- switch(duplex_edge, short = "notumble", "tumble")
+cat(str_glue("\\documentclass[{tumble},{size}paper]{{leaflet}}"))
+%% end.rcode
+
+% \usepackage{bigfoot}
+\usepackage{booktabs}
+\usepackage[colorlinks]{hyperref}
+% \usepackage{fancyhdr}
+\usepackage{etoolbox}
+
+%% begin.rcode graphicspath, echo=FALSE, results='asis'
+cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "pprules")))
+%% end.rcode
+
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(game, game_info)
+%% end.rcode
+
+\setcounter{secnumdepth}{0}
+\pagenumbering{gobble}
+
+%% begin.rcode title, echo=FALSE, results='asis'
+cat(str_glue("\\title{{{title(game, game_info)}}}"))
+%% end.rcode
+\date{}
+
+\begin{document}
+\maketitle\vspace{-3\baselineskip}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data(game, game_info)
+%% end.rcode
+
+\vspace{\fill} % empty line needed before \vspace 
+%% begin.rcode promo-image, echo=FALSE, results='asis', error=FALSE
+file <- normalizePath(cwhf$file)
+if (cwhf$height / cwhf$width < 3) {
+    width <- 1.0
+    height <- width * cwhf$height / cwhf$width
+    unit <- "\\linewidth"
+} else {
+    height <- 0.6
+    width <- height * cwhf$width / cwhf$height
+    unit <- "\\paperheight"
+}
+cat(str_glue("{{\\centering\\includegraphics[width={round(width,2)}{unit}, height={round(height, 2)}{unit}]{{{file}}}\\par}}"))
+%% end.rcode
+
+\vspace{\fill} % empty line needed before \vspace 
+\clearpage
+%% begin.rcode include, echo=FALSE, results='asis'
+cat(str_glue("\\section{{{title(game)}}}"))
+cat(str_glue("\\input{{{game}}}"))
+%% end.rcode
+
+\ifnumcomp{\value{page}}{<}{2}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{3}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{4}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{5}{\newpage\mbox{}}{}
+
+\subsection{Additional Resources}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links(game, game_info)
+%% end.rcode
+
+\vspace{\fill} % empty line needed before \vspace 
+\subsection{Credits}
+%% begin.rcode credits, echo=FALSE, results='asis'
+game_credits(game, game_info)
+%% end.rcode
+
+\end{document}

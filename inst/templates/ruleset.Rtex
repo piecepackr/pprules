@@ -1,0 +1,49 @@
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+cat(str_glue("\\documentclass[{size}paper,onecolumn]{{article}}"))
+# cat(str_glue("\\documentclass[{size}paper,twocolumn]{{article}}"))
+%% end.rcode
+
+\usepackage{bigfoot}
+\usepackage{booktabs}
+\usepackage[colorlinks]{hyperref}
+% \usepackage{fancyhdr}
+\usepackage{enumitem}
+
+%% begin.rcode graphicspath, echo=FALSE, results='asis'
+cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "pprules")))
+%% end.rcode
+
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(game, game_info)
+%% end.rcode
+
+\setcounter{secnumdepth}{0}
+% \setlist{noitemsep} % \setlist{nosep}
+% \pagenumbering{gobble}
+
+%% begin.rcode title, echo=FALSE, results='asis'
+cat(str_glue("\\title{{{title(game, game_info)}}}"))
+%% end.rcode
+\date{}
+
+\begin{document}
+\maketitle\vspace{-4\baselineskip}
+%% begin.rcode include, echo=FALSE, results='asis'
+game_data(game, game_info)
+cat(str_glue("\\input{{{game}}}"))
+%% end.rcode
+
+\subsection{Additional Resources}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links(game, game_info)
+%% end.rcode
+
+% \mbox{} 
+% 
+% \vspace*{\fill} % empty line needed before \vspace
+\subsection{Credits}
+%% begin.rcode credits, echo=FALSE, results='asis'
+game_credits(game, game_info)
+%% end.rcode
+
+\end{document}

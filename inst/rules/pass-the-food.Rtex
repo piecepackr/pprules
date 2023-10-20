@@ -1,0 +1,95 @@
+%% begin.rcode opts, echo=FALSE
+set_knitr_opts(game, output_ext, wd)
+cfg <- gk$get_piecepacks(1)[[1]]
+if (is_pamphlet) {
+    knitr::opts_chunk$set(out.width = "0.54\\linewidth", out.height = "0.81\\linewidth",
+                          out.extra = "trim = {0 3cm 0 0 }")
+} else {
+    knitr::opts_chunk$set(out.width = "0.40\\linewidth", out.height = "0.54\\linewidth",
+                          out.extra = "trim = {0 3cm 0 0 }")
+}
+%% end.rcode
+
+\subsection{Description}
+
+\emph{You and your partner are contestants in a cooking competition and speed is of the essence.  Drawing inspiration from egg tossing competitions and the ``flying fish'' of Pike Place Market you realized you'll be able to get a speed advantage over your competitors if one of you goes to the pantry and throws the food across the room to their partner.  Soon every team is throwing food to stay competitive.}
+
+\subsection{Objective}
+
+To score the most points by tossing coins onto combinations of tiles (these represent the most successful combinations of foods in the cooking contest).
+
+\subsection{Setup}
+
+Setup the tiles as in Figure \ref{fig:pass-the-food-starting-diagram} with the null tiles near the edge of the table\footnote{The farther away from the edge of the table the more challenging the game will get.  To start out with try a modest six inches or so.}.  Give every player six coins of the same suit.
+
+%% begin.rcode starting-diagram, fig.width=9, fig.height=13.5, fig.cap="Starting arrangement of tiles"
+pushViewport(viewport(width=inch(8), height=inch(12)))
+pmap_piece(piecepack_pass_the_food(), cfg=cfg, default.units="in")
+upViewport()
+%% end.rcode
+
+\subsection{Play}
+
+Every player takes a turn throwing one of their coins until there are no coins left.  Decide on fair throwing locations and styles\footnote{
+Recognizing that it is easier if you lean forward before tossing, you could require people stand far enough that they can barely touch the table if they lean forward with one foot on the ground.
+% \includegraphics[height=1cm]{forward_bend.png}
+% \includegraphics[height=\baselineskip]{forward_bend.png}
+%% begin.rcode forward_bend, echo=FALSE, results='asis'
+cat(str_glue("\\includegraphics[height=1.0em]{{{image}}}", 
+             image = system.file("images/forward_bend.png", package = "ppgames")))
+%% end.rcode
+}.
+
+\subsection{Scoring}
+
+\begin{table}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Rank & 0 & 1 & 2 & 3+ \\
+\midrule
+Ace (secret sauce) & 0 & 10 & 16 & 0 \\
+Five (fats) & 0 & 5 & 10 & 0 \\
+Four (proteins) & 0 & 5 & 9 & 0 \\
+Three (starches) & 0 & 5 & 8 & 0 \\
+Two (veggies) & 0 & 5 & 7 & 0 \\
+Null (garnish) & 0 & 1 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Points scored given how many coins landed on tiles of a particular rank}
+\label{tab:ptf:rank}
+\vspace{0.5cm}
+% \end{table}
+% \begin{table}
+% \centering
+\begin{tabular}{lcccc}
+\toprule
+Suit & 0 & 1 & 2 & 3+ \\
+\midrule
+Suns (spicy) & 0 & 3 & 5 & 0 \\
+Moons (salty) & 0 & 2 & 3 & 0 \\
+Crowns (sweet) & 0 & 2 & 3 & 0 \\
+Arms (sour) & 0 & 3 & 5 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Points scored given how many coins landed on tiles of a particular suit}
+\label{tab:ptf:suit}
+\end{table}
+
+After all the coins have been thrown we then score based on which suits and ranks of the tiles they landed on\footnote{If a coin is on two tiles assign it to the tile which it covers more.  If there is a dispute and there is no ``neutral'' judge handy then assign the player who last washed dishes as the judge.  If part of the bottom (``face'' or ``back'') of the coin touches the top (``face'') of a tile then it is considered ``on'' the tile.  Before scoring one may flip over coins backs up and re-arrange them squarely on their respective tiles.} using Tables \ref{tab:ptf:rank} and \ref{tab:ptf:suit}.  The judges reward a balance of flavors and ingredients but will reward ``edgier'' dishes a bit more.
+
+Figure \ref{fig:pass-the-food-scoring} shows the end state of an example game.  Suns threw coins on one null, one 2, and two 3 tiles $(1 + 5 + 8)$ plus two Suns and two Arms tiles $(5 + 5)$ for a score of $24$ points.  Moons threw coins on one null, one 4, and two ace tiles $(1 + 5 + 16)$ plus one Suns, one Moons, one Crowns, and one Arms tiles $(3 + 2 + 2 + 3)$ for a score of $32$ points.  Crowns threw coins on two 2, one 3, one 4, one 5, and one ace tiles $(7 + 5 + 5 + 5 + 10)$ plus one Suns and five Moons tiles $(3 + 0)$ for a score of $35$ points.  With three of their coins barely ``on'' their tiles, Arms threw coins on two null, one 2, and one ace tiles $(0 + 5 + 10)$ plus three Suns and one Arms tiles $(0 + 3)$ for a score of $18$ points.  
+
+%% begin.rcode scoring, fig.width=10, fig.height=15, fig.cap="Example game end state"
+pushViewport(viewport(width=inch(8), height=inch(12)))
+pmap_piece(piecepack_pass_the_food(), cfg=cfg, default.units="in")
+set.seed(12)
+df_coins <- tibble(piece_side = "coin_back", rank = rep(1:6, 4), suit = rep(1:4, each=6),
+                   x = runif(24, -0.70, 8.70), y = runif(24, -1.20, 13.20), angle = runif(24, 0, 360))
+pmap_piece(df_coins, cfg=cfg, default.units="in")
+upViewport()
+%% end.rcode
+
+\subsection{Strategy}
+
+The scoring system encourages you to spread your coins across suits and ranks: throwing a coin on a new suit or rank is usually worth more than throwing a coin on a previous suit or rank plus part of your score will be zeroed out if you throw more than two coins on a suit or rank.  Additionally, the riskier throws onto the tiles at the back and sides of the board are usually rewarded with higher points.  Be aware of how your opponent is doing and vary the riskiness of your throws accordingly.  Particularly skilled or desperate throwers may even seek to knock opponent's coins onto lower scoring tiles or off the board entirely.

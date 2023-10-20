@@ -1,0 +1,43 @@
+Encoding: UTF-8
+Package: pprules
+Type: Package
+Title: Piecepack Game Rules
+Version: 0.1.0-1
+Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
+             email="trevor.l.davis@gmail.com",
+             comment = c(ORCID = "0000-0001-6341-4639")))
+Description: Functions to generate piecepack game rulesets and books.
+License: CC BY-SA 4.0
+URL: https://github.com/piecepackr/pprules
+BugReports: https://github.com/piecepackr/pprules/issues
+LazyLoad: yes
+Depends: R (>= 3.4.0)
+Imports:
+    dplyr,
+    grid,
+    grDevices,
+    knitr,
+    piecepackr (>= 1.10.1),
+    ppdf,
+    R6,
+    rlang,
+    snakecase,
+    stats,
+    stringr,
+    tibble,
+    tools,
+    utils,
+    withr,
+    yaml
+Suggests:
+    png,
+    purrr,
+    systemfonts,
+    testthat,
+    vdiffr,
+    xmpdf (>= 0.1.0-32)
+Remotes: piecepackr/ppdf, xmpdf=trevorld/r-xmpdf
+SystemRequirements: exiftool, pandoc, xelatex
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Config/testthat/edition: 3
