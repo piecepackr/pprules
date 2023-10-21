@@ -9,10 +9,20 @@ test_that("game rules work as expected", {
 
     output <- file.path(dir, "backgammon.pdf")
     save_ruleset("backgammon", gk, output, quietly = TRUE)
-    expect_true(file.exists(output))
+    expect_true(file.size(output) > 1e3)
+
+    output <- file.path(dir, "shogi.html")
+    save_ruleset("shogi", gk, output, quietly = TRUE)
+    expect_true(file.size(output) > 1e3)
+
     output <- file.path(dir, "tablut.pdf")
     save_pamphlet("tablut", gk, output, quietly = TRUE)
-    expect_true(file.exists(file.path(dir, "tablut.pdf")))
+    expect_true(file.size(file.path(dir, "tablut.pdf")) > 1e3)
+
+    output <- file.path(dir, "ludo.pdf")
+    save_pocketmod("ludo", gk, output, quietly = TRUE)
+    expect_true(file.size(file.path(dir, "tablut.pdf")) > 1e3)
+
 })
 test_that("game books work as expected", {
     skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")

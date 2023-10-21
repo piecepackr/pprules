@@ -9,7 +9,7 @@
 #' @export
 names_rulesets <- function(book = NULL) {
     if (is.null(book)) {
-        names <- list.files(system.file("rules", package = "ppgames"))
+        names <- list.files(system.file("rules", package = "pprules"))
         names <- grep(".Rtex$", names, value=TRUE)
         names <- gsub(".Rtex$", "", names)
         names <- names[-grep("alice|seasons|ultima", names)]

@@ -30,11 +30,8 @@ Imports:
     withr,
     yaml
 Suggests:
-    png,
-    purrr,
     systemfonts,
     testthat,
-    vdiffr,
     xmpdf (>= 0.1.0-32)
 Remotes: piecepackr/ppdf, xmpdf=trevorld/r-xmpdf
 SystemRequirements: exiftool, pandoc, xelatex
