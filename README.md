@@ -1,9 +1,7 @@
 # pprules: **p**iece**p**ack **rules**
 
 [![R-CMD-check](https://github.com/piecepackr/pprules/workflows/R-CMD-check/badge.svg)](https://github.com/piecepackr/pprules/actions)
-
 [![Coverage Status](https://codecov.io/github/piecepackr/pprules/branch/master/graph/badge.svg)](https://app.codecov.io/github/piecepackr/pprules?branch=master)
-
 [![Project Status: WIP -- Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 
 ### Table of Contents
