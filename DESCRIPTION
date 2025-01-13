@@ -3,7 +3,7 @@ Package: pprules
 Type: Package
 Title: Piecepack Game Rules
 Version: 0.1.0-1
-Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
+Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")))
 Description: Functions to generate piecepack game rulesets and books.
@@ -33,7 +33,7 @@ Suggests:
     systemfonts,
     testthat,
     xmpdf (>= 0.1.0-32)
-Remotes: piecepackr/ppdf, xmpdf=trevorld/r-xmpdf
+Remotes: piecepackr/ppdf
 SystemRequirements: exiftool, pandoc, xelatex
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
