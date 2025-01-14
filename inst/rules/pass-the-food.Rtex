@@ -36,7 +36,7 @@ Recognizing that it is easier if you lean forward before tossing, you could requ
 % \includegraphics[height=\baselineskip]{forward_bend.png}
 %% begin.rcode forward_bend, echo=FALSE, results='asis'
 cat(str_glue("\\includegraphics[height=1.0em]{{{image}}}", 
-             image = system.file("images/forward_bend.png", package = "ppgames")))
+             image = system.file("images/forward_bend.png", package = "pprules")))
 %% end.rcode
 }.
 

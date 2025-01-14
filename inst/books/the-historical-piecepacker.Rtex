@@ -13,7 +13,7 @@ pdf_metadata(pdftitle = "The Historical Piecepacker",
 %% end.rcode
 
 %% begin.rcode graphicspath, echo=FALSE, results='asis'
-cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "ppgames")))
+cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "pprules")))
 %% end.rcode
 
 % Add Copyright Page
