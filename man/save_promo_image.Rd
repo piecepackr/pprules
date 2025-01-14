@@ -7,7 +7,7 @@
 save_promo_image(game, gk = game_kit(), file = NULL, ...)
 }
 \arguments{
-\item{game}{Game name.  Will be normalized by \code{\link[=normalize_name]{normalize_name()}}.}
+\item{game}{Game name.  Will be normalized by \code{\link[ppdf:normalize_name]{ppdf::normalize_name()}}.}
 
 \item{gk}{A \code{game_kit} R6 object.}
 

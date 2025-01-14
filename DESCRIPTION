@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: pprules
 Type: Package
 Title: Piecepack Game Rules
-Version: 0.1.0-2
+Version: 0.1.0-3
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")))
@@ -36,5 +36,5 @@ Suggests:
 Remotes: piecepackr/ppdf
 SystemRequirements: exiftool, pandoc, xelatex
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3

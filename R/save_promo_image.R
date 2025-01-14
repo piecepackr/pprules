@@ -10,7 +10,7 @@
 #' the resulting data frame with [piecepackr::render_piece()].
 #' See [ppdf::games_piecepack()] for list of games directly supported by this package.
 #'
-#' @param game Game name.  Will be normalized by [normalize_name()].
+#' @param game Game name.  Will be normalized by [ppdf::normalize_name()].
 #' @inheritParams save_ruleset
 #' @param file Filename for the image.  If `NULL` we'll generate
 #'             a pdf image with an appropriate name given `game`.

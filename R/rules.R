@@ -60,7 +60,7 @@ set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
 #' \code{save_pamphlet} is a variant that saves the ruleset as a (tri-fold) pamphlet.
 #'
 #' @param game Game name to generate ruleset for.  See [names_rulesets()].
-#'             Will be normalized by [normalize_name()].
+#'             Will be normalized by [ppdf::normalize_name()].
 #' @param gk A \code{game_kit} R6 object.
 #' @param output Path to the output file.
 #'        If \code{NULL} the function will guess a default.

@@ -32,7 +32,7 @@ save_pamphlet(
 }
 \arguments{
 \item{game}{Game name to generate ruleset for.  See \code{\link[=names_rulesets]{names_rulesets()}}.
-Will be normalized by \code{\link[=normalize_name]{normalize_name()}}.}
+Will be normalized by \code{\link[ppdf:normalize_name]{ppdf::normalize_name()}}.}
 
 \item{gk}{A \code{game_kit} R6 object.}
 
