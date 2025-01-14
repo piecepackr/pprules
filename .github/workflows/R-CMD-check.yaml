@@ -37,9 +37,10 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Install xelatex on Ubuntu
+      - name: Install `exiftool` and `xelatex` on Ubuntu
         if: runner.os == 'Linux'
         run: |
+            sudo apt-get install -y libimage-exiftool-perl
             sudo apt-get install -y texlive-xetex
         shell: bash
 
