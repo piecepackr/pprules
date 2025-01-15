@@ -2,13 +2,13 @@ Encoding: UTF-8
 Package: pprules
 Type: Package
 Title: Piecepack Game Rules
-Version: 0.1.0-3
+Version: 0.1.1
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")))
 Description: Functions to generate piecepack game rulesets and books.
 License: CC BY-SA 4.0
-URL: https://github.com/piecepackr/pprules
+URL: https://github.com/piecepackr/pprules, https://trevorldavis.com/R/pprules/
 BugReports: https://github.com/piecepackr/pprules/issues
 LazyLoad: yes
 Depends: R (>= 3.4.0)
