@@ -10,5 +10,5 @@ NULL
 # But we only use it indirectly from `{ppdf}` which has it in its `Suggests`
 # This should suppress a CRAN NOTE about `{snakecase}` being in `Imports` but not used
 dont_run <- function(x) {
-    snakecase::to_snake_case(x)
+	snakecase::to_snake_case(x)
 }

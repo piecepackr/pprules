@@ -8,29 +8,31 @@
 #'   names_rulesets()
 #' @export
 names_rulesets <- function(book = NULL) {
-    if (is.null(book)) {
-        names <- list.files(system.file("rules", package = "pprules"))
-        names <- grep(".Rtex$", names, value=TRUE)
-        names <- gsub(".Rtex$", "", names)
-        names <- names[-grep("alice|seasons|ultima", names)]
-        names <- gsub("mens-morris", "men's-morris", names)
-        names <- gsub("-", " ", names)
-    } else {
-        book <- normalize_name(book, sep = "-")
-        stopifnot(book == "the-historical-piecepacker")
-        names <- c("alquerque",
-                   "american checkers",
-                   "awithlaknannai mosona",
-                   "backgammon",
-                   "chaturaji",
-                   "cribbage",
-                   "four field kono",
-                   "international chess",
-                   "ludo",
-                   "nine men's morris",
-                   "tablut",
-                   "twelve men's morris",
-                   "xiangqi")
-    }
-    names
+	if (is.null(book)) {
+		names <- list.files(system.file("rules", package = "pprules"))
+		names <- grep(".Rtex$", names, value = TRUE)
+		names <- gsub(".Rtex$", "", names)
+		names <- names[-grep("alice|seasons|ultima", names)]
+		names <- gsub("mens-morris", "men's-morris", names)
+		names <- gsub("-", " ", names)
+	} else {
+		book <- normalize_name(book, sep = "-")
+		stopifnot(book == "the-historical-piecepacker")
+		names <- c(
+			"alquerque",
+			"american checkers",
+			"awithlaknannai mosona",
+			"backgammon",
+			"chaturaji",
+			"cribbage",
+			"four field kono",
+			"international chess",
+			"ludo",
+			"nine men's morris",
+			"tablut",
+			"twelve men's morris",
+			"xiangqi"
+		)
+	}
+	names
 }
