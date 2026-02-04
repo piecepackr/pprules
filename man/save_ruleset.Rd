@@ -69,7 +69,7 @@ Defaults to \code{\link[=save_promo_image]{save_promo_image()}}.}
 \examples{
   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
   gk <- game_kit(list(cfg = cfg))
-  if (Sys.which("xelatex") != "") {
+  if (pprules:::has_xelatex()) {
     output <- tempfile(fileext = ".pdf")
     save_pamphlet("tablut", gk = gk, output = output)
     # xopen::xopen(output)

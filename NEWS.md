@@ -1,6 +1,12 @@
 pprules 0.1.2 (development)
 ===========================
 
+Bug fixes and minor improvements
+--------------------------------
+
+* Improved `xelatex` error handling in functions like
+  `save_ruleset()`, `save_pamphlet()`, and `save_rulebook()`.
+
 pprules 0.1.1
 =============
 

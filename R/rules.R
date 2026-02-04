@@ -6,20 +6,53 @@
 xelatex <- function(tex, quietly = TRUE) {
 	stdout <- if (quietly) NULL else ""
 	pdf <- sub(paste0(file_ext(tex), "$"), "pdf", tex)
-	system2("xelatex", c(tex), stdout = stdout)
-	system2("xelatex", c(tex), stdout = stdout)
+	args <- c("-halt-on-error", "-interaction=nonstopmode")
+	suppressWarnings(system2("xelatex", c(args, tex), stdout = TRUE))
+	error <- suppressWarnings(system2("xelatex", c(args, tex), stdout = TRUE))
+	if (!file.exists(pdf)) {
+		error <- grep("LaTeX Error", error, value = TRUE)
+		error <- gsub("^! ", "", error)
+		names(error) <- rep_len("x", length(error))
+		msg <- c(
+			str_glue("`xelatex` failed to compile `{tex}`"),
+			error
+		)
+		abort(msg)
+	}
 	pdf
 }
 
+has_xelatex <- function() {
+	tryCatch(
+		{
+			check_xelatex()
+			TRUE
+		},
+		error = function(x) FALSE
+	)
+}
+
+check_xelatex <- function() {
+	stopifnot(nzchar(Sys.which("xelatex")))
+	dir <- setup_tempdir("hello")
+	wd <- setwd(dir)
+	on.exit(setwd(wd))
+	test_file <- system.file("hello.tex", package = "pprules")
+	file.copy(test_file, "hello.tex")
+	xelatex("hello.tex")
+	xelatex("hello.tex")
+	invisible(NULL)
+}
+
 to_latex <- function(kf) {
-	stopifnot(Sys.which("pandoc") != "")
+	stopifnot(nzchar(Sys.which("pandoc")))
 	tex <- sub(paste0(file_ext(kf), "$"), "tex", kf)
 	system2("pandoc", args = c("-o", tex, kf))
 	tex
 }
 
 to_output <- function(lf, output, cmd_options = c("--standalone", "--self-contained")) {
-	stopifnot(Sys.which("pandoc") != "")
+	stopifnot(nzchar(Sys.which("pandoc")))
 	system2("pandoc", args = c(cmd_options, "-o", output, lf))
 	output
 }
@@ -83,7 +116,7 @@ set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
 #' @examples
 #'   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
 #'   gk <- game_kit(list(cfg = cfg))
-#'   if (Sys.which("xelatex") != "") {
+#'   if (pprules:::has_xelatex()) {
 #'     output <- tempfile(fileext = ".pdf")
 #'     save_pamphlet("tablut", gk = gk, output = output)
 #'     # xopen::xopen(output)
