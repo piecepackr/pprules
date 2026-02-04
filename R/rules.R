@@ -97,6 +97,7 @@ set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
 #'
 #' @param game Game name to generate ruleset for.  See [names_rulesets()].
 #'             Will be normalized by [ppdf::normalize_name()].
+#'             If `output` is a pdf file may be a character vector of game names.
 #' @param gk A \code{game_kit} R6 object.
 #' @param output Path to the output file.
 #'        If \code{NULL} the function will guess a default.
@@ -122,6 +123,7 @@ set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
 #'     # xopen::xopen(output)
 #'     # browseURL(output)
 #'   }
+#' @return The path of the generated file invisibly.
 #' @export
 save_ruleset <- function(
 	game,
@@ -134,6 +136,21 @@ save_ruleset <- function(
 	game_files = NULL,
 	cmd_options = NULL
 ) {
+	if (length(game) > 1L) {
+		return(save_multiple_files(
+			game,
+			save_ruleset,
+			output,
+			...,
+			gk = gk,
+			quietly = quietly,
+			size = size,
+			game_info = game_info,
+			game_files = game_files,
+			cmd_options = cmd_options
+		))
+	}
+
 	cmd_options <- cmd_options %||% c("--standalone", "--self-contained", "--metadata=lang:en-US")
 
 	game_info <- game_info %||%
@@ -164,7 +181,7 @@ save_ruleset <- function(
 	tex <- knit(of, quiet = quietly)
 	if (output_ext == "pdf") {
 		pdf <- xelatex(tex, quietly)
-		embed_xmp(pdf, game, game_info)
+		try_embed_xmp(pdf, game, game_info)
 		file.copy(pdf, output, overwrite = TRUE)
 	} else {
 		if (quietly) {
@@ -174,7 +191,7 @@ save_ruleset <- function(
 		}
 		to_output(tex, output, cmd_options)
 	}
-	invisible(NULL)
+	invisible(output)
 }
 
 setup_tempdir <- function(output) {
@@ -201,6 +218,21 @@ save_pamphlet <- function(
 	game_files = NULL,
 	save_promo_fn = save_promo_image
 ) {
+	if (length(game) > 1L) {
+		return(save_multiple_files(
+			game,
+			save_pamphlet,
+			output,
+			...,
+			gk = gk,
+			quietly = quietly,
+			size = size,
+			duplex_edge = duplex_edge,
+			game_info = game_info,
+			game_files = game_files,
+			save_promo_fn = save_promo_fn
+		))
+	}
 	game_info <- game_info %||%
 		yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "pprules"))
 	game_files <- game_files %||%
@@ -243,12 +275,12 @@ save_pamphlet <- function(
 	tex <- knit(of, quiet = quietly)
 	if (output_ext == "pdf") {
 		pdf <- xelatex(tex, quietly)
-		embed_xmp(pdf, game, game_info)
+		try_embed_xmp(pdf, game, game_info)
 		file.copy(pdf, output, overwrite = TRUE)
 	} else {
 		abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
 	}
-	invisible(NULL)
+	invisible(output)
 }
 
 save_pocketmod <- function(
@@ -263,6 +295,22 @@ save_pocketmod <- function(
 	game_files = NULL,
 	save_promo_fn = save_promo_image
 ) {
+	if (length(game) > 1L) {
+		return(save_multiple_files(
+			game,
+			save_pocketmod,
+			output,
+			...,
+			gk = gk,
+			quietly = quietly,
+			size = size,
+			duplex_edge = duplex_edge,
+			game_info = game_info,
+			game_files = game_files,
+			save_promo_fn = save_promo_fn
+		))
+	}
+
 	game_info <- game_info %||%
 		yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "pprules"))
 	game_files <- game_files %||%
@@ -318,13 +366,13 @@ save_pocketmod <- function(
 	pdf <- xelatex(tex, quietly)
 
 	if (output_ext == "pdf") {
-		embed_xmp(pdf, game, game_info)
+		try_embed_xmp(pdf, game, game_info)
 		file.copy(pdf, output, overwrite = TRUE)
 	} else {
 		abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
 	}
 
-	invisible(NULL)
+	invisible(output)
 }
 
 knit_chapter <- function(
@@ -455,7 +503,7 @@ save_rulebook <- function(
 		}
 		to_output(tex, output, cmd_options)
 	}
-	invisible(NULL)
+	invisible(output)
 }
 
 clean_fn <- function(cleaned, x) {
@@ -528,35 +576,21 @@ game_credits <- function(game, game_info = NULL) {
 	cat(license, "\n")
 }
 
-embed_xmp <- function(file, game, game_info = NULL) {
-	info <- get_game_info(game, game_info)
-	x <- xmpdf::xmp()
-	x$creator <- author(game, game_info)
-	x$description <- subject(game, game_info)
-	x$rights <- info$copyright
-	x$spdx_id <- info$license %||% "CC-BY-SA-4.0"
-	x$subject <- strsplit(keywords(game, game_info), ", ")[[1]]
-	x$title <- title(game, game_info)
-
-	if (requireNamespace("xmpdf", quietly = TRUE)) {
-		if (xmpdf::supports_set_xmp()) {
-			xmpdf::set_xmp(x, file)
-		} else {
-			msg <- c(
-				x = "Unable to embed pdf XMP metadata",
-				xmpdf::enable_feature_message("set_xmp"),
-				i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
-			)
-			rlang::inform(msg, class = "piecepackr_embed_metadata")
-		}
+try_embed_xmp <- function(file, game, game_info = NULL) {
+	if (xmpdf::supports_set_xmp()) {
+		info <- get_game_info(game, game_info)
+		x <- xmpdf::xmp()
+		x$creator <- author(game, game_info)
+		x$description <- subject(game, game_info)
+		x$rights <- info$copyright
+		x$spdx_id <- info$license %||% "CC-BY-SA-4.0"
+		x$subject <- strsplit(keywords(game, game_info), ", ")[[1]]
+		x$title <- title(game, game_info)
+		xmpdf::set_xmp(x, file)
 	} else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
-		msg <- c(
-			x = "Need the {xmpdf} package to embed pdf metadata",
-			i = '`remotes::install_github("trevorld/r-xmpdf")`',
-			i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
-		)
-		rlang::inform(msg, class = "piecepackr_embed_metadata")
+		inform_set_xmp()
 	}
+	invisible(NULL)
 }
 
 game_length <- function(gl) {
@@ -701,4 +735,79 @@ href <- function(url, name = NULL) {
 		name <- latex_url_name(url)
 	}
 	str_glue("\\href{{{url}}}{{{name}}}")
+}
+
+save_multiple_files <- function(games, fn = save_ruleset, output = NULL, ...) {
+	rlang::check_installed("xmpdf")
+	stopifnot(xmpdf::supports_cat_pages())
+	if (is.null(output)) {
+		output <- "piecepack_games.pdf"
+	}
+	if (!exists(output)) {
+		file.create(output)
+	}
+	output <- normalizePath(output)
+	output_ext <- file_ext(output)
+	if (output_ext != "pdf") {
+		abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
+	}
+
+	dir <- setup_tempdir(output)
+	wd <- setwd(dir)
+	on.exit(setwd(wd))
+
+	filenames <- vapply(games, fn, character(1L), ...)
+	xmpdf::cat_pages(filenames, output)
+	if (
+		xmpdf::supports_get_docinfo() &&
+			xmpdf::supports_set_bookmarks() &&
+			xmpdf::supports_n_pages()
+	) {
+		title <- vapply(
+			xmpdf::get_docinfo(filenames),
+			function(x) x$title,
+			character(1L)
+		)
+		plengths <- vapply(filenames, xmpdf::n_pages, integer(1L))
+		page <- c(1L, 1L + cumsum(plengths)[-length(plengths)])
+		bm <- data.frame(title = title, page = page)
+		xmpdf::set_bookmarks(bm, output)
+	} else if (
+		!xmpdf::supports_set_bookmarks() && !isFALSE(getOption("piecepackr.metadata.inform"))
+	) {
+		inform_set_bookmarks()
+	} else if (
+		!xmpdf::supports_get_docinfo() && !isFALSE(getOption("piecepackr.metadata.inform"))
+	) {
+		inform_get_docinfo()
+	}
+
+	invisible(output)
+}
+
+inform_get_docinfo <- function() {
+	msg <- c(
+		x = "Unable to get pdf docinfo",
+		xmpdf::enable_feature_message("get_docinfo"),
+		i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
+	)
+	rlang::inform(msg, class = "piecepackr_embed_metadata")
+}
+
+inform_set_bookmarks <- function() {
+	msg <- c(
+		x = "Unable to embed pdf bookmarks",
+		xmpdf::enable_feature_message("set_bookmarks"),
+		i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
+	)
+	rlang::inform(msg, class = "piecepackr_embed_metadata")
+}
+
+inform_set_xmp <- function() {
+	msg <- c(
+		x = "Unable to embed pdf XMP metadata",
+		xmpdf::enable_feature_message("set_xmp"),
+		i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
+	)
+	rlang::inform(msg, class = "piecepackr_embed_metadata")
 }

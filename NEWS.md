@@ -1,11 +1,10 @@
 pprules 0.1.2 (development)
 ===========================
 
-Bug fixes and minor improvements
---------------------------------
-
-* Improved `xelatex` error handling in functions like
-  `save_ruleset()`, `save_pamphlet()`, and `save_rulebook()`.
+* The `game` argument of `save_pamphlet()` and `save_ruleset()` can now be a character vector of games when the target output is a pdf file (#1).
+* `save_pamphlet()`, `save_rulebook()`, and `save_ruleset()` now return the path to the generated file silently.
+* Improved `xelatex` error handling when generating pdf files in
+  `save_pamphlet()`, `save_rulebook()`, and `save_ruleset()`.
 
 pprules 0.1.1
 =============
