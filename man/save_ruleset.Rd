@@ -32,7 +32,8 @@ save_pamphlet(
 }
 \arguments{
 \item{game}{Game name to generate ruleset for.  See \code{\link[=names_rulesets]{names_rulesets()}}.
-Will be normalized by \code{\link[ppdf:normalize_name]{ppdf::normalize_name()}}.}
+Will be normalized by \code{\link[ppdf:normalize_name]{ppdf::normalize_name()}}.
+If \code{output} is a pdf file may be a character vector of game names.}
 
 \item{gk}{A \code{game_kit} R6 object.}
 
@@ -61,6 +62,9 @@ and if "long" match along its long edge (second page flipped upside down, usual 
 \item{save_promo_fn}{A function with arguments \code{game}, \code{gk}, and \code{file}
 that saves a promo image for \code{game}.
 Defaults to \code{\link[=save_promo_image]{save_promo_image()}}.}
+}
+\value{
+The path of the generated file invisibly.
 }
 \description{
 \code{save_ruleset} save ruleset of a game.
