@@ -8,7 +8,7 @@
 #' we'll convert the game name to snake case, prepend a `"piecepack_"`
 #' in front and then `dynGet()` a function with that name and use
 #' the resulting data frame with [piecepackr::render_piece()].
-#' See [ppdf::games_piecepack()] for list of games directly supported by this package.
+#' See [ppdf::piecepack_games()] for list of games directly supported by this package.
 #'
 #' @param game Game name.  Will be normalized by [ppdf::normalize_name()].
 #' @inheritParams save_ruleset

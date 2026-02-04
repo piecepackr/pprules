@@ -30,7 +30,7 @@ If we haven't created a custom image for this game then basically
 we'll convert the game name to snake case, prepend a \code{"piecepack_"}
 in front and then \code{dynGet()} a function with that name and use
 the resulting data frame with \code{\link[piecepackr:render_piece]{piecepackr::render_piece()}}.
-See \code{\link[ppdf:games_info]{ppdf::games_piecepack()}} for list of games directly supported by this package.
+See \code{\link[ppdf:games_info]{ppdf::piecepack_games()}} for list of games directly supported by this package.
 }
 \examples{
 file <- tempfile(fileext = ".pdf")

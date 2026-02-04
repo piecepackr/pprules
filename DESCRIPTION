@@ -36,5 +36,5 @@ Suggests:
 Remotes: piecepackr/ppdf
 SystemRequirements: exiftool, pandoc, xelatex
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Config/testthat/edition: 3

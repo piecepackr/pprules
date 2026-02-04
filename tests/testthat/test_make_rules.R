@@ -3,9 +3,10 @@ gk <- game_kit()
 dir <- tempfile()
 on.exit(unlink(dir))
 dir.create(dir)
+
 test_that("game rules work as expected", {
-	skip_if(Sys.which("pandoc") == "", "Doesn't have pandoc binary")
-	skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")
+	skip_if_not(nzchar(Sys.which("pandoc")), "Doesn't have pandoc binary")
+	skip_if_not(has_xelatex(), "Doesn't have suitable xelatex setup")
 
 	output <- file.path(dir, "backgammon.pdf")
 	save_ruleset("backgammon", gk, output, quietly = TRUE)
@@ -23,8 +24,9 @@ test_that("game rules work as expected", {
 	save_pocketmod("ludo", gk, output, quietly = TRUE)
 	expect_true(file.size(file.path(dir, "tablut.pdf")) > 1e3)
 })
+
 test_that("game books work as expected", {
-	skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")
+	skip_if_not(has_xelatex(), "Doesn't have suitable xelatex setup")
 
 	output <- file.path(dir, "the-historical-piecepacker.pdf")
 	save_rulebook("the historical piecepacker", gk, output, quietly = TRUE)
