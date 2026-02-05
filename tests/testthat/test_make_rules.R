@@ -6,13 +6,13 @@ dir.create(dir)
 
 test_that("game rules work as expected", {
 	skip_if_not(nzchar(Sys.which("pandoc")), "Doesn't have pandoc binary")
-
-	output <- file.path(dir, "backgammon.pdf")
-	save_ruleset("backgammon", gk, output, quietly = TRUE)
-	expect_true(file.size(output) > 1e3)
-
 	output <- file.path(dir, "shogi.html")
 	save_ruleset("shogi", gk, output, quietly = TRUE)
+	expect_true(file.size(output) > 1e3)
+
+	skip_if_not(has_xelatex(), "Doesn't have suitable xelatex setup")
+	output <- file.path(dir, "backgammon.pdf")
+	save_ruleset("backgammon", gk, output, quietly = TRUE)
 	expect_true(file.size(output) > 1e3)
 
 	output <- file.path(dir, "tablut.pdf")
